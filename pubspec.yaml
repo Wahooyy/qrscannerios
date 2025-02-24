@@ -1,0 +1,50 @@
+name: qrscanner
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  mobile_scanner: ^3.5.6
+  permission_handler: ^11.4.0
+  google_fonts: ^6.1.0
+  font_awesome_flutter: ^10.7.0
+  http: ^1.1.0
+  flutter_svg: ^2.0.10
+  lottie: ^3.3.1
+  flutter_native_splash: ^2.4.5
+  flutter_launcher_icons: ^0.14.3
+  figma_squircle:
+    git:
+      url: https://github.com/Wahooyy/figma_squircle.git
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/
+    - assets/Star.svg
+    - assets/lottie/Splash-Screen-Test.json
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  fullscreen: true
+  android: true
+  ios: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/erp.png"
+  adaptive_icon_foreground: "assets/erp.png"
+  adaptive_icon_background: "#FFFFFF"
