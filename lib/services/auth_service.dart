@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthService {
-  static const String baseUrl = 'http://192.168.1.229/erp';
+  static const String baseUrl = 'https://wahooyy.my.id/erp';
   static String? csrfToken;
   static String? sessionId;
   static Map<String, dynamic>? _userData; // Add this to store user data
