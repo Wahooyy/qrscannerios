@@ -22,6 +22,7 @@ dependencies:
   figma_squircle:
     git:
       url: https://github.com/Wahooyy/figma_squircle.git
+  rive: ^0.13.20
 
 
 dev_dependencies:
@@ -32,6 +33,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/blobs.riv
     - assets/icons/
     - assets/Star.svg
     - assets/lottie/Splash-Screen-Test.json

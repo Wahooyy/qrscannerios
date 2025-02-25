@@ -37,7 +37,7 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 24),
               Text(
                 userData?['username'] ?? 'Username',
-                style: GoogleFonts.epilogue(
+                style: GoogleFonts.poppins(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,7 +45,7 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 userData?['email'] ?? 'Email',
-                style: GoogleFonts.epilogue(
+                style: GoogleFonts.poppins(
                   fontSize: 16,
                   color: Colors.grey,
                 ),
@@ -60,7 +60,7 @@ class ProfilePage extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               'Profile Settings',
-              style: GoogleFonts.epilogue(
+              style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
@@ -126,7 +126,7 @@ class ProfilePage extends StatelessWidget {
               ),
               child: Text(
                 'Keluar',
-                style: GoogleFonts.epilogue(
+                style: GoogleFonts.poppins(
                   color: Colors.red,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -178,7 +178,7 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   Text(
                     text,
-                    style: GoogleFonts.epilogue(
+                    style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -186,7 +186,7 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: GoogleFonts.epilogue(
+                    style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: Colors.grey,
                     ),

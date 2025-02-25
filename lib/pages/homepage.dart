@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: Text(
           'QR Scanner',
-          style: GoogleFonts.epilogue(
+          style: GoogleFonts.poppins(
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -94,7 +94,7 @@ class HomeContent extends StatelessWidget {
           // Recent Orders List
           Text(
             'Recent Orders',
-            style: GoogleFonts.epilogue(
+            style: GoogleFonts.poppins(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: Colors.black,
@@ -133,7 +133,7 @@ class HomeContent extends StatelessWidget {
           children: [
             Text(
               title,
-              style: GoogleFonts.epilogue(
+              style: GoogleFonts.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 color: Colors.black,
@@ -142,7 +142,7 @@ class HomeContent extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               value,
-              style: GoogleFonts.epilogue(
+              style: GoogleFonts.poppins(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -177,7 +177,7 @@ class HomeContent extends StatelessWidget {
             children: [
               Text(
                 orderId,
-                style: GoogleFonts.epilogue(
+                style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
@@ -185,7 +185,7 @@ class HomeContent extends StatelessWidget {
               ),
               Text(
                 '$items items',
-                style: GoogleFonts.epilogue(
+                style: GoogleFonts.poppins(
                   fontSize: 14,
                   color: Colors.black54,
                 ),

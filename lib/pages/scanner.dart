@@ -142,7 +142,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         ),
         title: Text(
           '',
-          style: GoogleFonts.epilogue(
+          style: GoogleFonts.poppins(
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -302,7 +302,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                     const SizedBox(width: 8),
                     Text(
                       'Scan untuk Sales Order: $_currentSalesOrder',
-                      style: GoogleFonts.epilogue(
+                      style: GoogleFonts.poppins(
                         color: Colors.blue,
                         fontWeight: FontWeight.w500,
                       ),
@@ -391,7 +391,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                     child: Text(
                       'List Item',
-                      style: GoogleFonts.epilogue(
+                      style: GoogleFonts.poppins(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -452,7 +452,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                               ),
                               child: Text(
                                 code,
-                                style: GoogleFonts.epilogue(
+                                style: GoogleFonts.poppins(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -472,7 +472,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
               child: Center(
                 child: Text(
                   'Masukkan kode sales order terlebih dahulu',
-                  style: GoogleFonts.epilogue(
+                  style: GoogleFonts.poppins(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
@@ -500,7 +500,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                 : null,
               child: Text(
                 'Simpan',
-                style: GoogleFonts.epilogue(
+                style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
