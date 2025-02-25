@@ -2,10 +2,10 @@ name: Build iOS Flutter App
 on:
   push:
     branches:
-      - main  # Sesuaikan dengan branch Anda
+      - main
 jobs:
   build:
-    runs-on: macos-latest  # Menjalankan di macOS
+    runs-on: macos-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
