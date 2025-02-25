@@ -1,0 +1,44 @@
+name: Build iOS Flutter App
+on:
+  push:
+    branches:
+      - main  # Sesuaikan dengan branch Anda
+jobs:
+  build:
+    runs-on: macos-latest  # Menjalankan di macOS
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.0'
+      - name: Install Dependencies
+        run: flutter pub get
+      - name: Setup CocoaPods
+        run: |
+          cd ios
+          pod deintegrate
+          pod install
+      - name: Commit and Push Podfile Changes
+        env:
+          GIT_AUTH: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${GIT_AUTH}@github.com/Wahooyy/qrscanner.git
+          git add ios/Podfile ios/Podfile.lock
+          git commit -m "Update Podfile and Podfile.lock"
+          git push origin main
+        continue-on-error: true
+      - name: Build iOS App
+        run: flutter build ios --no-codesign
+      - name: Archive iOS Build
+        run: zip -r ios-build.zip build/ios/iphoneos/Runner.app      
+      - name: Upload iOS Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: ios-build.zip
