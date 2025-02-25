@@ -16,6 +16,6 @@ workflows:
         script: | 
           find . -name "Podfile" -execdir pod install \;
       - name: Build iOS App
-        run: flutter build ios --no-codesign
+        script: flutter build ios --no-codesign
       - name: Archive iOS Build
-        run: zip -r ios-build.zip build/ios/iphoneos/Runner.app    
+        script: zip -r ios-build.zip build/ios/iphoneos/Runner.app    
