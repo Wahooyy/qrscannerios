@@ -5,14 +5,12 @@ class AuthService {
   static const String baseUrl = 'http://192.168.1.229/erp';
   static String? csrfToken;
   static String? sessionId;
-  static Map<String, dynamic>? _userData; // Add this to store user data
-
+  static Map<String, dynamic>? _userData;
   static Map<String, dynamic>? get userData => _userData;
 
   static Future<bool> initializeAuth() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/api/get_csrf'));
-      
+      final response = await http.get(Uri.parse('$baseUrl/api/get_csrf'));  
       if (response.statusCode == 200) {
         String? cookies = response.headers['set-cookie'];
         if (cookies != null) {
@@ -65,7 +63,7 @@ class AuthService {
         }
 
         final responseData = json.decode(response.body);
-        _userData = responseData['data']; // Store the user data
+        _userData = responseData['data'];
         return responseData;
       } else {
         throw Exception('Server error');
@@ -76,10 +74,9 @@ class AuthService {
   }
 
   static Future<void> signOut() async {
-    // Clear tokens and session
     csrfToken = null;
     sessionId = null;
-    _userData = null; // Clear user data on sign out
+    _userData = null;
 
   }
 }

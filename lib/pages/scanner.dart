@@ -5,8 +5,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 
-
-
 class QRScannerPage extends StatefulWidget {
   const QRScannerPage({super.key});
 
@@ -26,25 +24,35 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
   String? _currentSalesOrder;
   bool _showDebugInput = false; 
   
+  String? _selectedPrefix;
   
-  final List<String> _dummySalesOrders = [
-    'SO-001',
-    'SO-002',
-    'SO-003',
-  ];
-
+  final Map<String, List<String>> _dummyData = {
+    'SO': ['SO01', 'SO02', 'SO03'],
+    'PO': ['PO01', 'PO02', 'PO03', 'PO04'],
+    'PD': ['PD01', 'PD02', 'PD03', 'PD04', 'PD05']
+  };
   
   final List<String> _dummyProducts = [
-    'PROD-001',
-    'PROD-002',
-    'PROD-003',
-    'PROD-004',
-    'PROD-005',
-    'PROD-006',
-    'PROD-007',
-    'PROD-008',
-    'PROD-009',
-    'PROD-010',
+    'KD01',
+    'KD02',
+    'KD03',
+    'KD04',
+    'KD05',
+    'KD06',
+    'KD07',
+    'KD08',
+    'KD09',
+    'KD10',
+    'KD11',
+    'KD12',
+    'KD13',
+    'KD14',
+    'KD15',
+    'KD16',
+    'KD17',
+    'KD18',
+    'KD19',
+    'KD20',
   ];
 
   @override
@@ -82,11 +90,9 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
           _hasPermission = result.isGranted;
         });
       } else if (status.isPermanentlyDenied) {
-        // On iOS, this might be called when the user has denied permission "Don't Allow"
         setState(() {
           _hasPermission = false;
         });
-        // Show an alert directing users to Settings
         showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -122,12 +128,10 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
     }
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAFAFD),
-      // backgroundColor: Color(0xFFf1f2f4),
-      // backgroundColor: Colors.black,
+      backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
@@ -135,21 +139,20 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         leading: IconButton(
           icon: SvgPicture.asset(
             'assets/icons/Left.svg',  
-            width: 36,   
-            height: 36,
+            width: 32,   
+            height: 32,
           ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           '',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.inter(
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
         ),
         actions: [
-          
           IconButton(
             icon: SvgPicture.asset(
               'assets/icons/Filter.svg',  
@@ -181,43 +184,90 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         ],
       ),
       body: Column(
-        children: [
-          
+        children: [ 
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                TextField(
-                  controller: _salesOrderController,
-                  decoration: InputDecoration(
-                    hintText: 'Cari Kode',
-                    filled: true,
-                    fillColor: Colors.white, 
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    prefixIcon: IconButton(
-                      icon: SvgPicture.asset(
-                        'assets/icons/Search.svg',  
-                        width: 24,   
-                        height: 24,
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _salesOrderController,
+                        decoration: InputDecoration(
+                          hintText: _selectedPrefix == null 
+                            ? 'Pilih tipe pencarian dulu' 
+                            : 'Cari Kode ${_selectedPrefix}',
+                          filled: true,
+                          fillColor: Colors.white, 
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: IconButton(
+                            icon: SvgPicture.asset(
+                              'assets/icons/Search.svg',  
+                              width: 24,   
+                              height: 24,
+                            ),
+                            onPressed: () {
+                              _searchWithPrefix();
+                            },
+                          ),
+                          prefixText: _selectedPrefix != null ? '${_selectedPrefix!} ' : null,
+                          prefixStyle: GoogleFonts.inter(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16,
+                          ),
+                          enabled: _selectedPrefix != null,
+                        ),
+                        onSubmitted: (value) {
+                          _searchWithPrefix();
+                        },
                       ),
-                      onPressed: () {
-                        if (_salesOrderController.text.isNotEmpty) {
-                          _validateAndSetSalesOrder(_salesOrderController.text);
-                        }
-                      },
+                    ),
+                    const SizedBox(width: 12),
+                    Container(
+                      height: 56,
+                      width: 56,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        icon: SvgPicture.asset(
+                          'assets/icons/Filter.svg',
+                          width: 24,
+                          height: 24,
+                        ),
+                        onPressed: () {
+                          _showFilterOptions(context);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                if (_selectedPrefix == null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withOpacity(0.1),
+                        borderRadius: SmoothBorderRadius(
+                          cornerRadius: 8,
+                          cornerSmoothing: 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.info_outline, color: Colors.amber),
+                          const SizedBox(width: 8),
+                          const Text('Pilih SO, PO, atau PD terlebih dahulu'),
+                        ],
+                      ),
                     ),
                   ),
-                  onSubmitted: (value) {
-                    if (value.isNotEmpty) {
-                      _validateAndSetSalesOrder(value);
-                    }
-                  },
-                ),
-                
-                
                 if (_showDebugInput && _currentSalesOrder != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
@@ -229,7 +279,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                             color: Colors.amber.withOpacity(0.1),
                             borderRadius: SmoothBorderRadius(
                               cornerRadius: 8,
-                              cornerSmoothing: 1, // Adjust for a softer curve
+                              cornerSmoothing: 1,
                             ),
                           ),
                           child: Row(
@@ -261,7 +311,6 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                             ElevatedButton(
                               onPressed: () {
                                 if (_debugProductController.text.isNotEmpty) {
-                                  
                                   _addScannedProduct(_debugProductController.text);
                                   _debugProductController.clear();
                                 }
@@ -283,7 +332,6 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
             ),
           ),
 
-          
           if (_currentSalesOrder != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -293,7 +341,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                   color: Colors.blue.withOpacity(0.1),
                   borderRadius: SmoothBorderRadius(
                     cornerRadius: 8,
-                    cornerSmoothing: 1, // Adjust for a softer curve
+                    cornerSmoothing: 1,
                   ),
                 ),
                 child: Row(
@@ -301,8 +349,8 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                     const Icon(Icons.info_outline, color: Colors.blue),
                     const SizedBox(width: 8),
                     Text(
-                      'Scan untuk Sales Order: $_currentSalesOrder',
-                      style: GoogleFonts.poppins(
+                      'Scan untuk $_selectedPrefix: $_currentSalesOrder',
+                      style: GoogleFonts.inter(
                         color: Colors.blue,
                         fontWeight: FontWeight.w500,
                       ),
@@ -312,7 +360,6 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
               ),
             ),
 
-          
           if (_hasPermission && _currentSalesOrder != null && !_showDebugInput)
             Container(
               margin: const EdgeInsets.all(16),
@@ -321,13 +368,13 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
               decoration: BoxDecoration(
                 borderRadius: SmoothBorderRadius(
                   cornerRadius: 12,
-                  cornerSmoothing: 1, // Adjust for a softer curve
+                  cornerSmoothing: 1,
                 ),
               ),
               child: ClipRRect(
                 borderRadius: SmoothBorderRadius(
                   cornerRadius: 30,
-                  cornerSmoothing: 1, // Adjust for a softer curve
+                  cornerSmoothing: 1,
                 ),
                 child: Stack(
                   children: [
@@ -348,7 +395,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                         decoration: BoxDecoration(
                           borderRadius: SmoothBorderRadius(
                             cornerRadius: 12,
-                            cornerSmoothing: 1, // Adjust for a softer curve
+                            cornerSmoothing: 1,
                           ),
                         ),
                       ),
@@ -391,7 +438,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                     child: Text(
                       'List Item',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -452,7 +499,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                               ),
                               child: Text(
                                 code,
-                                style: GoogleFonts.poppins(
+                                style: GoogleFonts.inter(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -471,8 +518,10 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
             Expanded(
               child: Center(
                 child: Text(
-                  'Masukkan kode sales order terlebih dahulu',
-                  style: GoogleFonts.poppins(
+                  _selectedPrefix == null 
+                    ? 'Pilih tipe pencarian (SO, PO, PD) terlebih dahulu' 
+                    : 'Masukkan kode $_selectedPrefix terlebih dahulu',
+                  style: GoogleFonts.inter(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
@@ -480,7 +529,6 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
               ),
             ),
 
-          
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
@@ -500,7 +548,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                 : null,
               child: Text(
                 'Simpan',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -512,25 +560,144 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
       ),
     );
   }
+  
+  void _showFilterOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) {
+          return Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Pilih Tipe Pencarian',
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                _buildFilterOption('SO', setModalState),
+                _buildFilterOption('PO', setModalState),
+                _buildFilterOption('PD', setModalState),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2563EB),
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _salesOrderController.clear();
+                    setState(() {
+                      _currentSalesOrder = null;
+                      _scannedProducts.clear();
+                    });
+                  },
+                  child: Text(
+                    'Apply',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      ),
+    );
+  }
 
-  void _validateAndSetSalesOrder(String code) {
-    if (_dummySalesOrders.contains(code)) {
+  Widget _buildFilterOption(String label, StateSetter setModalState) {
+    return InkWell(
+      onTap: () {
+        setModalState(() {
+          setState(() {
+            _selectedPrefix = label;
+          });
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        decoration: BoxDecoration(
+          color: _selectedPrefix == label ? Colors.blue.withOpacity(0.1) : Colors.white,
+          borderRadius: _selectedPrefix == label 
+            ? BorderRadius.circular(8) 
+            : BorderRadius.zero,
+          border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
+        ),
+        child: Row(
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: _selectedPrefix == label ? Colors.blue : Colors.black,
+              ),
+            ),
+            const Spacer(),
+            if (_selectedPrefix == label)
+              Icon(Icons.check_circle, color: Colors.blue),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _searchWithPrefix() {
+    if (_selectedPrefix == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pilih tipe pencarian (SO, PO, PD) terlebih dahulu')),
+      );
+      return;
+    }
+    
+    if (_salesOrderController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Masukkan nomor $_selectedPrefix')),
+      );
+      return;
+    }
+    final searchValue = _salesOrderController.text;
+    final fullCode = searchValue.startsWith(_selectedPrefix!) 
+                      ? searchValue 
+                      : '$_selectedPrefix$searchValue';
+    
+    _validateAndSetOrder(fullCode);
+  }
+
+  void _validateAndSetOrder(String code) {
+    if (_dummyData[_selectedPrefix!]!.contains(code)) {
       setState(() {
         _currentSalesOrder = code;
         _scannedProducts.clear(); 
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sales Order $code dipilih')),
+        SnackBar(content: Text('$_selectedPrefix $code dipilih')),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kode tidak ditemukan')),
+        SnackBar(content: Text('Kode $_selectedPrefix tidak ditemukan')),
       );
     }
   }
 
   void _addScannedProduct(String code) {
-    
     if (!_dummyProducts.contains(code)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Kode produk tidak ditemukan')),

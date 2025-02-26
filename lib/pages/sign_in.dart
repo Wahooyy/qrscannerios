@@ -103,7 +103,6 @@ class _SignInPageState extends State<SignInPage> {
   bool _validateInputs() {
     bool isValid = true;
     
-    // Validate username
     if (_usernameController.text.isEmpty) {
       setState(() {
         _usernameError = 'Username harus diisi';
@@ -115,7 +114,6 @@ class _SignInPageState extends State<SignInPage> {
       });
     }
     
-    // Validate password
     if (_passwordController.text.isEmpty) {
       setState(() {
         _passwordError = 'Password harus diisi';
@@ -144,8 +142,6 @@ class _SignInPageState extends State<SignInPage> {
       filled: true,
       fillColor: const Color(0xFFF5F9FE),
       suffixIcon: suffixIcon,
-      
-      // Apply Figma squircle effect using SmoothBorderRadius
       border: OutlineInputBorder(
         borderRadius: SmoothBorderRadius(
           cornerRadius: 14,
@@ -193,7 +189,6 @@ class _SignInPageState extends State<SignInPage> {
           width: 1,
         ),
       ),
-      // Hide the default error message
       errorStyle: const TextStyle(
         height: 0,
         color: Colors.transparent,
@@ -239,8 +234,6 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  
-                  // Username field with fixed height
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -281,8 +274,6 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   
                   const SizedBox(height: 16),
-                  
-                  // Password field with fixed height
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -345,8 +336,6 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   
                   const SizedBox(height: 24),
-                  
-                  // Login button
                   SizedBox(
                     height: 60,
                     width: double.infinity,

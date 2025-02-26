@@ -18,18 +18,30 @@
       return Stack(
         clipBehavior: Clip.none,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: SvgPicture.asset(
+              'assets/Navbar.svg', // Make sure the path is correct
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.white,
+                BlendMode.srcIn,
+              ),
             ),
+          ),
+          Positioned(
             child: Theme(
               data: Theme.of(context).copyWith(
                 splashFactory: NoSplash.splashFactory, // Removes the ripple animation
-                highlightColor: Colors.transparent, // Removes highlight effect
+                highlightColor: Colors.transparent,
               ),
               child: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
                 selectedItemColor: Colors.black,
                 unselectedItemColor: Colors.grey,
                 showSelectedLabels: true,
@@ -38,8 +50,8 @@
                 onTap: onItemTapped,
                   items: [
                   BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: EdgeInsets.only(top: 15),
+                    icon: Transform.translate(
+                      offset: Offset(0, 10),
                       child: SvgPicture.asset(
                         'assets/icons/Home.svg',
                         width: 24,
@@ -52,8 +64,8 @@
                     label: '',
                   ),
                   BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: EdgeInsets.only(top: 15),
+                    icon: Transform.translate(
+                      offset: Offset(0, 10),
                       child: SvgPicture.asset(
                         'assets/icons/Search.svg',
                         width: 24,
@@ -66,15 +78,15 @@
                     label: '',
                   ),
                   BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: EdgeInsets.only(top: 15),
+                    icon: Transform.translate(
+                      offset: Offset(0, -10),
                       child: Icon(Icons.scanner),
                     ),
                     label: '',
                   ),
                   BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: EdgeInsets.only(top: 15),
+                    icon: Transform.translate(
+                      offset: Offset(0, 10),
                       child: SvgPicture.asset(
                         'assets/icons/Vector.svg',
                         width: 24,
@@ -87,8 +99,8 @@
                     label: '',
                   ),
                   BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: EdgeInsets.only(top: 15),
+                    icon: Transform.translate(
+                      offset: Offset(0, 10),
                       child: SvgPicture.asset(
                         'assets/icons/User.svg',
                         width: 24,
@@ -104,25 +116,8 @@
               ),
             ),
           ),
-          // White curved background for the center button
           Positioned(
-            bottom: 25,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2563EB).withOpacity(0.3),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ),
-          // Center button
-          Positioned(
-            bottom: 30,
+            bottom: 50,
             left: 0,
             right: 0,
             child: GestureDetector(
@@ -134,24 +129,25 @@
               },
               child: Center(
                 child: Container(
-                  width: 80,
-                  height: 80,
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                     color: const Color(0xFF2563EB),
                     shape: BoxShape.circle,
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     color: Colors.black.withOpacity(0.2),
-                    //     spreadRadius: 3,
-                    //     blurRadius: 10,
-                    //   ),
-                    // ],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xFF2563EB).withOpacity(0.2),
+                        offset: Offset(0, 4),
+                        spreadRadius: 0,
+                        blurRadius: 12,
+                      ),
+                    ],
                   ),
                   child: Center(
                     child: SvgPicture.asset(
                       'assets/icons/Scanner.svg',
-                      width: 36,
-                      height: 36,
+                      width: 28,
+                      height: 28,
                       color: Colors.white
                     ),
                   ),

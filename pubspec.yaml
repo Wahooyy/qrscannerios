@@ -23,6 +23,7 @@ dependencies:
     git:
       url: https://github.com/Wahooyy/figma_squircle.git
   rive: ^0.13.20
+  flutter_custom_clippers: ^2.1.0
 
 
 dev_dependencies:
@@ -36,6 +37,7 @@ flutter:
     - assets/blobs.riv
     - assets/icons/
     - assets/Star.svg
+    - assets/Navbar.svg
     - assets/lottie/Splash-Screen-Test.json
 
 flutter_native_splash:
