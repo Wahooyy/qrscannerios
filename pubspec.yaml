@@ -24,6 +24,10 @@ dependencies:
       url: https://github.com/Wahooyy/figma_squircle.git
   rive: ^0.13.20
   flutter_custom_clippers: ^2.1.0
+  supabase_flutter: ^2.8.4
+  crypto: ^3.0.6
+  shared_preferences: ^2.5.2
+  hugeicons: ^0.0.10
 
 
 dev_dependencies:

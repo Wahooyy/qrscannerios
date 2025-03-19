@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hugeicons/hugeicons.dart';
+
 import '../services/auth_service.dart';
 import 'sign_in.dart';
 
@@ -25,19 +26,18 @@ class ProfilePage extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.grey.shade300,
                 ),
-                child: Center(
-                  child: SvgPicture.asset(
-                    'assets/icons/User.svg', // Custom SVG Icon
-                    width: 50,
-                    height: 50,
-                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                child: const Center(
+                  child: Icon(
+                    HugeIcons.strokeRoundedUser,// Default User Icon
+                    size: 50,
+                    color: Colors.white,
                   ),
                 ),
               ),
               const SizedBox(height: 24),
               Text(
                 userData?['username'] ?? 'Username',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.inter(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,7 +45,7 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 userData?['email'] ?? 'Email',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.inter(
                   fontSize: 16,
                   color: Colors.grey,
                 ),
@@ -59,8 +59,8 @@ class ProfilePage extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Profile Settings',
-              style: GoogleFonts.poppins(
+              'Pengaturan Profil',
+              style: GoogleFonts.inter(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
@@ -77,61 +77,42 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: [
                 _buildProfileOption(
-                  svgIcon: 'assets/icons/User.svg',
-                  text: 'Edit Profile',
-                  subtitle: 'Update your personal information',
+                  icon: HugeIcons.strokeRoundedPencilEdit02,
+                  text: 'Profil',
+                  subtitle: 'Ubah informasi profil',
                   onTap: () {},
                 ),
                 _buildSeparator(),
                 _buildProfileOption(
-                  svgIcon: 'assets/icons/Lock.svg',
-                  text: 'Change Password',
-                  subtitle: 'Secure your account with a new password',
+                  icon: HugeIcons.strokeRoundedSquareLock02,
+                  text: 'Kata Sandi',
+                  subtitle: 'Ubah kata sandi',
                   onTap: () {},
                 ),
                 _buildSeparator(),
                 _buildProfileOption(
-                  svgIcon: 'assets/icons/Filter.svg',
-                  text: 'Settings',
-                  subtitle: 'Manage app preferences',
+                  icon: HugeIcons.strokeRoundedSettings05,
+                  text: 'Pengaturan',
+                  subtitle: 'Pengaturan aplikasi',
                   onTap: () {},
+                ),
+                _buildSeparator(), // Add separator before Logout
+                _buildProfileOption(
+                  icon: HugeIcons.strokeRoundedLogout03, // Default logout icon
+                  text: 'Keluar',
+                  subtitle: 'Keluar dari akun kamu',
+                  onTap: () async {
+                    await AuthService.signOut();
+                    if (context.mounted) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignInPage()),
+                        (route) => false,
+                      );
+                    }
+                  },
                 ),
               ],
-            ),
-          ),
-
-          const Spacer(),
-
-          // Logout Button (No Shadow)
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: () async {
-                await AuthService.signOut();
-                if (context.mounted) {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SignInPage()),
-                    (route) => false,
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 255, 238, 238),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 0, // No shadow
-              ),
-              child: Text(
-                'Keluar',
-                style: GoogleFonts.poppins(
-                  color: Colors.red,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
             ),
           ),
         ],
@@ -139,9 +120,9 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Profile Option Widget with Custom SVG Icon Inside Grey Circle
+  // Profile Option Widget with Default Icons
   Widget _buildProfileOption({
-    required String svgIcon,
+    required IconData icon,
     required String text,
     required String subtitle,
     required VoidCallback onTap,
@@ -152,7 +133,7 @@ class ProfilePage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         child: Row(
           children: [
-            // Grey Circle with SVG Icon
+            // Grey Circle with Default Icon
             Container(
               width: 40,
               height: 40,
@@ -161,11 +142,10 @@ class ProfilePage extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: SvgPicture.asset(
-                  svgIcon,
-                  width: 20,
-                  height: 20,
-                  colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                child: Icon(
+                  icon,
+                  size: 20,
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -178,7 +158,7 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   Text(
                     text,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -186,7 +166,7 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.inter(
                       fontSize: 14,
                       color: Colors.grey,
                     ),
@@ -196,11 +176,10 @@ class ProfilePage extends StatelessWidget {
             ),
 
             // Right Arrow Icon
-            SvgPicture.asset(
-              'assets/icons/Right.svg', // Custom SVG for Arrow
-              width: 16,
-              height: 16,
-              colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Colors.grey,
             ),
           ],
         ),

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:figma_squircle/figma_squircle.dart';
+import 'package:hugeicons/hugeicons.dart';
+
 
 class QRScannerPage extends StatefulWidget {
   const QRScannerPage({super.key});
@@ -13,6 +14,7 @@ class QRScannerPage extends StatefulWidget {
 }
 
 class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProviderStateMixin {
+  
   MobileScannerController cameraController = MobileScannerController();
   bool _hasPermission = false;
   late AnimationController _animationController;
@@ -80,6 +82,70 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
     super.dispose();
   }
 
+  void _showSnackBar(BuildContext context, String message) {
+    final overlay = Overlay.of(context);
+    late OverlayEntry overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).padding.top + 10,
+        left: 16,
+        right: 16,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            height: 40,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF7E4E4),
+              borderRadius: SmoothBorderRadius(
+                cornerRadius: 8,
+                cornerSmoothing: 1,
+              ),
+              border: Border.all(color: const Color(0xFFFFA3A6)),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  HugeIcons.strokeRoundedAlertCircle,
+                  color: Color(0xFFE21C3D),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: GoogleFonts.inter(
+                      color: const Color(0xFF141414),
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    HugeIcons.strokeRoundedMultiplicationSign,
+                    color: Colors.grey,
+                    size: 20,
+                  ),
+                  onPressed: () => overlayEntry.remove(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (overlayEntry.mounted) {
+        overlayEntry.remove();
+      }
+    });
+  }
+
+
   Future<void> _checkPermission() async {
     try {
       final status = await Permission.camera.status;
@@ -137,11 +203,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: SvgPicture.asset(
-            'assets/icons/Left.svg',  
-            width: 32,   
-            height: 32,
-          ),
+          icon: Icon(HugeIcons.strokeRoundedArrowLeft01),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -154,11 +216,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         ),
         actions: [
           IconButton(
-            icon: SvgPicture.asset(
-              'assets/icons/Filter.svg',  
-              width: 24,   
-              height: 24,
-            ),
+            icon: Icon(HugeIcons.strokeRoundedBug01),
             onPressed: () {
               setState(() {
                 _showDebugInput = !_showDebugInput;
@@ -169,13 +227,12 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
             icon: ValueListenableBuilder<TorchState>(
               valueListenable: cameraController.torchState,
               builder: (context, state, child) {
-                return SvgPicture.asset(
+                return Icon(
                   state == TorchState.off 
-                    ? 'assets/icons/Lightning.svg' 
-                    : 'assets/icons/Lightning.svg',
-                  width: 24, 
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn), 
+                    ? HugeIcons.strokeRoundedFlashOff 
+                    : HugeIcons.strokeRoundedFlash,
+                  color: Colors.black,
+                  size: 24,
                 );
               },
             ),
@@ -201,15 +258,14 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                           filled: true,
                           fillColor: Colors.white, 
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: SmoothBorderRadius(
+                              cornerRadius: 12,
+                              cornerSmoothing: 1,
+                            ),
                             borderSide: BorderSide.none,
                           ),
                           prefixIcon: IconButton(
-                            icon: SvgPicture.asset(
-                              'assets/icons/Search.svg',  
-                              width: 24,   
-                              height: 24,
-                            ),
+                            icon: Icon(HugeIcons.strokeRoundedSearch01),
                             onPressed: () {
                               _searchWithPrefix();
                             },
@@ -228,18 +284,17 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                     ),
                     const SizedBox(width: 12),
                     Container(
-                      height: 56,
-                      width: 56,
+                      height: 48,
+                      width: 48,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: SmoothBorderRadius(
+                          cornerRadius: 12,
+                          cornerSmoothing: 1,
+                        ),
                       ),
                       child: IconButton(
-                        icon: SvgPicture.asset(
-                          'assets/icons/Filter.svg',
-                          width: 24,
-                          height: 24,
-                        ),
+                        icon: Icon(HugeIcons.strokeRoundedFilterHorizontal),
                         onPressed: () {
                           _showFilterOptions(context);
                         },
@@ -301,7 +356,10 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                                   filled: true,
                                   fillColor: Colors.white, 
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: SmoothBorderRadius(
+                                      cornerRadius: 12,
+                                      cornerSmoothing: 1,
+                                    ),
                                     borderSide: BorderSide.none,
                                   ),
                                 ),
@@ -318,7 +376,10 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.amber,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: SmoothBorderRadius(
+                                    cornerRadius: 12,
+                                    cornerSmoothing: 1,
+                                  ),
                                 ),
                               ),
                               child: const Text('Add'),
@@ -373,7 +434,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
               ),
               child: ClipRRect(
                 borderRadius: SmoothBorderRadius(
-                  cornerRadius: 30,
+                  cornerRadius: 12,
                   cornerSmoothing: 1,
                 ),
                 child: Stack(
@@ -444,7 +505,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   Expanded(
                     child: ListView.builder(
                     padding: const EdgeInsets.all(16),
@@ -455,7 +516,10 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16), 
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12), 
+                          borderRadius: SmoothBorderRadius(
+                          cornerRadius: 12,
+                          cornerSmoothing: 1,
+                        ),
                           child: Dismissible(
                             key: Key(code),
                             direction: DismissDirection.endToStart,
@@ -463,9 +527,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                               setState(() {
                                 _scannedProducts.remove(code);
                               });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('$code dihapus')),
-                              );
+                              _showSnackBar(context, '$code dihapus');
                             },
                             background: Container(
                               alignment: Alignment.centerRight,
@@ -480,12 +542,11 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                 ),
-                                child: Center(
-                                  child: SvgPicture.asset(
-                                    'assets/icons/Trash-can.svg',
-                                    width: 24,
-                                    height: 24,
-                                    colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),
+                                child: const Center(
+                                  child: Icon(
+                                    HugeIcons.strokeRoundedDelete02,
+                                    color: Colors.red,
+                                    size: 24,
                                   ),
                                 ),
                               ),
@@ -536,14 +597,15 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                 backgroundColor: const Color(0xFF2563EB), 
                 minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: SmoothBorderRadius(
+                          cornerRadius: 12,
+                          cornerSmoothing: 1,
+                        ),
                 ),
               ),
               onPressed: (_currentSalesOrder != null && _scannedProducts.isNotEmpty) 
                 ? () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Berhasil!')),
-                    );
+                    _showSnackBar(context, 'Berhasil!');
                   }
                 : null,
               child: Text(
@@ -593,7 +655,10 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                     backgroundColor: const Color(0xFF2563EB),
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: SmoothBorderRadius(
+                          cornerRadius: 12,
+                          cornerSmoothing: 1,
+                        ),
                     ),
                   ),
                   onPressed: () {
@@ -605,7 +670,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                     });
                   },
                   child: Text(
-                    'Apply',
+                    'Simpan',
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -636,7 +701,10 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         decoration: BoxDecoration(
           color: _selectedPrefix == label ? Colors.blue.withOpacity(0.1) : Colors.white,
           borderRadius: _selectedPrefix == label 
-            ? BorderRadius.circular(8) 
+            ? SmoothBorderRadius(
+                cornerRadius: 8,
+                cornerSmoothing: 1,
+              )
             : BorderRadius.zero,
           border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
         ),
@@ -661,16 +729,12 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
 
   void _searchWithPrefix() {
     if (_selectedPrefix == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pilih tipe pencarian (SO, PO, PD) terlebih dahulu')),
-      );
+      _showSnackBar(context, 'Pilih tipe pencarian (SO, PO, PD) terlebih dahulu');
       return;
     }
     
     if (_salesOrderController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Masukkan nomor $_selectedPrefix')),
-      );
+      _showSnackBar(context, 'Masukkan nomor $_selectedPrefix');
       return;
     }
     final searchValue = _salesOrderController.text;
@@ -687,21 +751,15 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         _currentSalesOrder = code;
         _scannedProducts.clear(); 
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$_selectedPrefix $code dipilih')),
-      );
+      _showSnackBar(context, '$_selectedPrefix $code dipilih');
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Kode $_selectedPrefix tidak ditemukan')),
-      );
+      _showSnackBar(context, 'Kode $_selectedPrefix tidak ditemukan');
     }
   }
 
   void _addScannedProduct(String code) {
     if (!_dummyProducts.contains(code)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kode produk tidak ditemukan')),
-      );
+      _showSnackBar(context, 'Kode roll tidak ditemukan');
       return;
     }
 
@@ -710,9 +768,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         _scannedProducts.add(code);
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kode ini sudah di scan')),
-      );
+      _showSnackBar(context, 'Kode ini sudah di scan');
     }
   }
 }

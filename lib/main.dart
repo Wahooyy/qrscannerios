@@ -2,13 +2,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'pages/sign_in.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-void main() {
+void main() async {
   // Ensure the splash screen stays visible until Flutter is ready
   WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+  
+  // Initialize Supabase
+  await Supabase.initialize(
+    url: 'https://metxmtsnkyecrguekpao.supabase.co', // Replace with your actual Supabase URL
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ldHhtdHNua3llY3JndWVrcGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzNTMxNjUsImV4cCI6MjA1NzkyOTE2NX0.SoK56-fpfM4cojQ9buoexYMWIzrQrLH_DdWJrWinBr0', // Replace with your actual Supabase anon key
+  );
   
   runApp(const MyApp());
 }
@@ -22,7 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'QR Scanner',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        textTheme: GoogleFonts.epilogueTextTheme(
+        textTheme: GoogleFonts.interTextTheme(
           Theme.of(context).textTheme,
         ),
       ),

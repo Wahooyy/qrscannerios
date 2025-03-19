@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: Text(
           'QR Scanner',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.inter(
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -76,14 +76,14 @@ class HomeContent extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildStatCard(
-                  title: "Today's Scan",
+                  title: "Total Scan",
                   value: "247",
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: _buildStatCard(
-                  title: "Pending Orders",
+                  title: "Pending",
                   value: "10",
                 ),
               ),
@@ -93,8 +93,8 @@ class HomeContent extends StatelessWidget {
 
           // Recent Orders List
           Text(
-            'Recent Orders',
-            style: GoogleFonts.poppins(
+            'Riwayat',
+            style: GoogleFonts.inter(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: Colors.black,
@@ -133,7 +133,7 @@ class HomeContent extends StatelessWidget {
           children: [
             Text(
               title,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.inter(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 color: Colors.black,
@@ -142,7 +142,7 @@ class HomeContent extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               value,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.inter(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -177,7 +177,7 @@ class HomeContent extends StatelessWidget {
             children: [
               Text(
                 orderId,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
@@ -185,7 +185,7 @@ class HomeContent extends StatelessWidget {
               ),
               Text(
                 '$items items',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.inter(
                   fontSize: 14,
                   color: Colors.black54,
                 ),
