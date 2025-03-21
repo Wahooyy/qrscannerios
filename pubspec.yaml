@@ -28,6 +28,8 @@ dependencies:
   crypto: ^3.0.6
   shared_preferences: ^2.5.2
   hugeicons: ^0.0.10
+  page_transition: ^2.2.1
+  animations: ^2.0.11
 
 
 dev_dependencies:
@@ -42,6 +44,7 @@ flutter:
     - assets/icons/
     - assets/Star.svg
     - assets/Navbar.svg
+    - assets/Soon.svg
     - assets/lottie/Splash-Screen-Test.json
 
 flutter_native_splash:

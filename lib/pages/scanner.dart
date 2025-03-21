@@ -115,7 +115,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                 Expanded(
                   child: Text(
                     message,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.outfit(
                       color: const Color(0xFF141414),
                       fontSize: 14,
                     ),
@@ -208,7 +208,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         ),
         title: Text(
           '',
-          style: GoogleFonts.inter(
+          style: GoogleFonts.outfit(
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -271,7 +271,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                             },
                           ),
                           prefixText: _selectedPrefix != null ? '${_selectedPrefix!} ' : null,
-                          prefixStyle: GoogleFonts.inter(
+                          prefixStyle: GoogleFonts.outfit(
                             fontWeight: FontWeight.normal,
                             fontSize: 16,
                           ),
@@ -284,8 +284,8 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                     ),
                     const SizedBox(width: 12),
                     Container(
-                      height: 48,
-                      width: 48,
+                      height: 56,
+                      width: 56,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: SmoothBorderRadius(
@@ -399,7 +399,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
               child: Container(
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: Color(0xFF3461FD).withOpacity(0.1),
                   borderRadius: SmoothBorderRadius(
                     cornerRadius: 8,
                     cornerSmoothing: 1,
@@ -407,12 +407,12 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline, color: Colors.blue),
+                    const Icon(Icons.info_outline, color: Color(0xFF3461FD)),
                     const SizedBox(width: 8),
                     Text(
                       'Scan untuk $_selectedPrefix: $_currentSalesOrder',
-                      style: GoogleFonts.inter(
-                        color: Colors.blue,
+                      style: GoogleFonts.outfit(
+                        color: Color(0xFF3461FD),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -499,7 +499,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                     child: Text(
                       'List Item',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.outfit(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -533,7 +533,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                               alignment: Alignment.centerRight,
                               padding: const EdgeInsets.only(right: 20),
                               decoration: BoxDecoration(
-                                color: Colors.blue.withOpacity(0.3),
+                                color: Color(0xFF3461FD).withOpacity(0.3),
                               ),
                               child: Container(
                                 width: 40,
@@ -560,7 +560,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                               ),
                               child: Text(
                                 code,
-                                style: GoogleFonts.inter(
+                                style: GoogleFonts.outfit(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -582,7 +582,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                   _selectedPrefix == null 
                     ? 'Pilih tipe pencarian (SO, PO, PD) terlebih dahulu' 
                     : 'Masukkan kode $_selectedPrefix terlebih dahulu',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.outfit(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
@@ -610,7 +610,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                 : null,
               child: Text(
                 'Simpan',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -640,7 +640,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
               children: [
                 Text(
                   'Pilih Tipe Pencarian',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.outfit(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -671,7 +671,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                   },
                   child: Text(
                     'Simpan',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.outfit(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -699,7 +699,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         decoration: BoxDecoration(
-          color: _selectedPrefix == label ? Colors.blue.withOpacity(0.1) : Colors.white,
+          color: _selectedPrefix == label ? Color(0xFF3461FD).withOpacity(0.1) : Colors.white,
           borderRadius: _selectedPrefix == label 
             ? SmoothBorderRadius(
                 cornerRadius: 8,
@@ -712,15 +712,15 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
           children: [
             Text(
               label,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: _selectedPrefix == label ? Colors.blue : Colors.black,
+                color: _selectedPrefix == label ? Color(0xFF3461FD) : Colors.black,
               ),
             ),
             const Spacer(),
             if (_selectedPrefix == label)
-              Icon(Icons.check_circle, color: Colors.blue),
+              Icon(Icons.check_circle, color: Color(0xFF3461FD)),
           ],
         ),
       ),

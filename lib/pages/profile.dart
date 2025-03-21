@@ -1,131 +1,186 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:figma_squircle/figma_squircle.dart';
 
 import '../services/auth_service.dart';
 import 'sign_in.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  Map<String, dynamic>? userData;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    if (AuthService.userData != null) {
+      setState(() {
+        userData = AuthService.userData;
+        isLoading = false;
+      });
+      return;
+    }
+
+    final dbData = await AuthService.getUserData();
+    if (dbData != null) {
+      setState(() {
+        userData = dbData;
+        isLoading = false;
+      });
+      return;
+    }
+
+    final storedData = await AuthService.getStoredUserInfo();
+    setState(() {
+      userData = storedData;
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final userData = AuthService.userData;
+    String firstLetter = 'U';
+    if (userData != null && userData!['adminname'] != null) {
+      final adminName = userData!['adminname'].toString();
+      if (adminName.isNotEmpty) {
+        firstLetter = adminName.substring(0, 1).toUpperCase();
+      }
+    }
 
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        children: [
-          // Profile Picture, Username & Email (Centered)
-          Column(
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey.shade300,
-                ),
-                child: const Center(
-                  child: Icon(
-                    HugeIcons.strokeRoundedUser,// Default User Icon
-                    size: 50,
-                    color: Colors.white,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFFE6F0FF),
+                        ),
+                        child: Center(
+                          child: Text(
+                            firstLetter,
+                            style: GoogleFonts.outfit(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF3461FD),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        userData?['adminname'] ?? 'Name',
+                        style: GoogleFonts.outfit(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        userData?['username'] ?? 'Username',
+                        style: GoogleFonts.outfit(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                userData?['username'] ?? 'Username',
-                style: GoogleFonts.inter(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                userData?['email'] ?? 'Email',
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
 
-          const SizedBox(height: 32),
+                  const SizedBox(height: 32),
 
-          // Section Title
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Pengaturan Profil',
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+                  Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: SmoothRectangleBorder(
+                        borderRadius: SmoothBorderRadius(
+                          cornerRadius: 16,
+                          cornerSmoothing: 0.6,
+                        ),
+                        side: BorderSide(
+                          color: Colors.grey.shade100,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        _buildProfileOption(
+                          icon: HugeIcons.strokeRoundedPencilEdit02,
+                          text: 'Profil',
+                          onTap: () {},
+                        ),
+                        _buildSeparator(),
+                        _buildProfileOption(
+                          icon: HugeIcons.strokeRoundedSquareLock02,
+                          text: 'Kata Sandi',
+                          onTap: () {},
+                        ),
+                        _buildSeparator(),
+                        _buildProfileOption(
+                          icon: HugeIcons.strokeRoundedSettings05,
+                          text: 'Pengaturan',
+                          onTap: () {},
+                        ),
+                        _buildSeparator(),
+                        _buildProfileOption(
+                          icon: HugeIcons.strokeRoundedLogout03,
+                          text: 'Keluar',
+                          onTap: () async {
+                            await AuthService.signOut();
+                            if (context.mounted) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SignInPage()),
+                                (route) => false,
+                              );
+                            }
+                          },
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Versi 1.0.0',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  const Text(
+                    '© 2025 Wahooyy',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
               ),
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          // White Card with List Items
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              children: [
-                _buildProfileOption(
-                  icon: HugeIcons.strokeRoundedPencilEdit02,
-                  text: 'Profil',
-                  subtitle: 'Ubah informasi profil',
-                  onTap: () {},
-                ),
-                _buildSeparator(),
-                _buildProfileOption(
-                  icon: HugeIcons.strokeRoundedSquareLock02,
-                  text: 'Kata Sandi',
-                  subtitle: 'Ubah kata sandi',
-                  onTap: () {},
-                ),
-                _buildSeparator(),
-                _buildProfileOption(
-                  icon: HugeIcons.strokeRoundedSettings05,
-                  text: 'Pengaturan',
-                  subtitle: 'Pengaturan aplikasi',
-                  onTap: () {},
-                ),
-                _buildSeparator(), // Add separator before Logout
-                _buildProfileOption(
-                  icon: HugeIcons.strokeRoundedLogout03, // Default logout icon
-                  text: 'Keluar',
-                  subtitle: 'Keluar dari akun kamu',
-                  onTap: () async {
-                    await AuthService.signOut();
-                    if (context.mounted) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SignInPage()),
-                        (route) => false,
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
 
-  // Profile Option Widget with Default Icons
   Widget _buildProfileOption({
     required IconData icon,
     required String text,
-    required String subtitle,
     required VoidCallback onTap,
+    Color color = Colors.black, // Default hitam, bisa diubah
   }) {
     return InkWell(
       onTap: onTap,
@@ -133,49 +188,18 @@ class ProfilePage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         child: Row(
           children: [
-            // Grey Circle with Default Icon
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Icon(
-                  icon,
-                  size: 20,
-                  color: Colors.black,
+            Icon(icon, size: 24, color: color),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                text,
+                style: GoogleFonts.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: color, // Warna teks sesuai parameter
                 ),
               ),
             ),
-            const SizedBox(width: 16),
-
-            // Text & Subtitle
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    text,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Right Arrow Icon
             const Icon(
               Icons.arrow_forward_ios,
               size: 16,
@@ -187,12 +211,12 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Separator Widget
+
   Widget _buildSeparator() {
     return Divider(
-      color: Colors.grey.shade300,
+      color: Colors.grey.shade100,
       height: 1,
-      thickness: 1,
+      thickness: 2,
       indent: 20,
       endIndent: 20,
     );

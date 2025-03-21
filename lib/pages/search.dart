@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SearchPage extends StatelessWidget {
@@ -6,33 +7,30 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      color: Colors.white,
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Search...',
-              hintStyle: GoogleFonts.epilogue(),
-              prefixIcon: const Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/Soon.svg',
+              width: 256,
+              height: 256,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Coming Soon',
+              style: GoogleFonts.outfit(
+                fontSize: 24,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: Center(
-              child: Text(
-                'Search Results Will Appear Here',
-                style: GoogleFonts.epilogue(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

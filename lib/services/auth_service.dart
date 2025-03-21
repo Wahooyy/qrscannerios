@@ -6,14 +6,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   static final SupabaseClient _supabaseClient = Supabase.instance.client;
-
-  static var userData;
+  
+  // Static variable to cache user data
+  static Map<String, dynamic>? userData;
   
   // Initialize auth and check if user is already logged in
   static Future<bool> initializeAuth() async {
     try {
       // Check if there's an active session
       final session = _supabaseClient.auth.currentSession;
+      if (session != null) {
+        // Load user data if session exists
+        userData = await getUserData();
+        if (userData == null) {
+          userData = await getStoredUserInfo();
+        }
+      }
       return session != null;
     } catch (e) {
       debugPrint('Error initializing auth: $e');
@@ -32,21 +40,21 @@ class AuthService {
       // Step 1: Query tbl_user to find the matching user by niklogin
       final List<dynamic> userResponse = await _supabaseClient
           .from('tbl_user')
-          // .select('*');
-          .select('email, password, user_uuid, niklogin, level')
+          .select('email, password, user_uuid, niklogin, level, adminname, username')
           .eq('niklogin', niklogin)
           .limit(1);
-          debugPrint('User Response: $userResponse');
+      debugPrint('User Response: $userResponse');
+      
       // Check if we got any results back
       if (userResponse.isEmpty) {
         return {'status': false, 'message': 'Username tidak ditemukan'};
       }
       
       // Get the first matching user
-      final userData = userResponse[0];
+      final userDataFromDb = userResponse[0];
       
       // Step 2: Verify the password with MD5 hash
-      final storedPassword = userData['password'] as String;
+      final storedPassword = userDataFromDb['password'] as String;
       final hashedInputPassword = _convertToMd5(password);
       
       if (storedPassword != hashedInputPassword) {
@@ -54,8 +62,9 @@ class AuthService {
       }
       
       // Step 3: Get the email and uuid for Supabase auth
-      final email = userData['email'] as String;
-      final userUuid = userData['user_uuid'] as String;
+      final email = userDataFromDb['email'] as String;
+      // ignore: unused_local_variable
+      final userUuid = userDataFromDb['user_uuid'] as String;
       
       // Step 4: Sign in with Supabase auth using email
       try {
@@ -68,13 +77,12 @@ class AuthService {
           return {'status': false, 'message': 'Gagal otentikasi dengan sistem'};
         }
         
+        // Store user data in the static variable
+        userData = userDataFromDb;
+        
         // Store additional user info in SharedPreferences
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_info', jsonEncode({
-          'username': userData['username'],
-          'level': userData['level'],
-          'niklogin': niklogin
-        }));
+        await prefs.setString('user_info', jsonEncode(userDataFromDb));
         
         return {'status': true, 'message': 'Login berhasil'};
       } catch (authError) {
@@ -108,14 +116,17 @@ class AuthService {
       final user = _supabaseClient.auth.currentUser;
       if (user == null) return null;
       
-      final List<dynamic> userData = await _supabaseClient
+      final List<dynamic> userDataFromDb = await _supabaseClient
           .from('tbl_user')
           .select('*')
           .eq('user_uuid', user.id)
           .limit(1);
           
-      if (userData.isEmpty) return null;
-      return userData[0];
+      if (userDataFromDb.isEmpty) return null;
+      
+      // Update the static userData variable
+      userData = userDataFromDb[0];
+      return userData;
     } catch (e) {
       debugPrint('Error fetching user data: $e');
       return null;
@@ -129,7 +140,10 @@ class AuthService {
       final userInfoString = prefs.getString('user_info');
       if (userInfoString == null) return null;
       
-      return jsonDecode(userInfoString) as Map<String, dynamic>;
+      final storedData = jsonDecode(userInfoString) as Map<String, dynamic>;
+      // Update the static userData variable
+      userData = storedData;
+      return storedData;
     } catch (e) {
       debugPrint('Error getting stored user info: $e');
       return null;
@@ -141,6 +155,9 @@ class AuthService {
     // Clear stored user info
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('user_info');
+    
+    // Clear the static userData variable
+    userData = null;
     
     // Sign out from Supabase
     await _supabaseClient.auth.signOut();

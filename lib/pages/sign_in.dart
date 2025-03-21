@@ -83,7 +83,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                   Expanded(
                     child: Text(
                       message,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.outfit(
                         color: const Color(0xFF141414),
                         fontSize: 14,
                       ),
@@ -198,7 +198,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
   }) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: GoogleFonts.inter(
+      hintStyle: GoogleFonts.outfit(
         color: const Color(0xFF262626),
         fontWeight: FontWeight.w400,
       ),
@@ -280,7 +280,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                   const SizedBox(height: 40),
                   Text(
                     'Masuk',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.outfit(
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                       color: const Color(0xFF2A4ECA),
@@ -290,7 +290,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                   Text(
                     'Pakai username dan kata sandi kamu',  // Changed username to NIK
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       color: const Color(0xFF64748B),
@@ -308,7 +308,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                             hintText: 'Username',  // Changed from Username to NIK
                             isError: _usernameError != null,
                           ),
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.outfit(
                             color: const Color(0xFF262626),
                             fontWeight: FontWeight.w400,
                           ),
@@ -326,7 +326,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                           padding: const EdgeInsets.only(top: 4, left: 1),
                           child: Text(
                             _usernameError!,
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.outfit(
                               color: const Color(0xFFE21C3D),
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -362,7 +362,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                               constraints: const BoxConstraints(), // Ensures no extra spacing
                             ),
                           ),
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.outfit(
                             color: const Color(0xFF262626),
                             fontWeight: FontWeight.w400,
                           ),
@@ -381,7 +381,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                           padding: const EdgeInsets.only(top: 4, left: 1),
                           child: Text(
                             _passwordError!,
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.outfit(
                               color: const Color(0xFFE21C3D),
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -411,7 +411,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
                               'Masuk',
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.outfit(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
