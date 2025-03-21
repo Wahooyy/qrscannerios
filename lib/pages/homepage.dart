@@ -50,26 +50,50 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          _titles[_selectedIndex],
-          style: GoogleFonts.outfit(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF1E293B),
-          ),
-        ),
-        actions: [
+      backgroundColor: Colors.white,
+      scrolledUnderElevation: 0,
+      elevation: 0,
+      centerTitle: _selectedIndex != 0, // Center title only if not on homepage
+      title: _selectedIndex == 0
+          ? Row(
+              children: [
+                Text(
+                  'Halo, wahooy',
+                  style: GoogleFonts.outfit(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF1E293B),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  _titles[_selectedIndex],
+                  style: GoogleFonts.outfit(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF1E293B),
+                  ),
+                ),
+              ],
+            )
+          : Text(
+              _titles[_selectedIndex],
+              style: GoogleFonts.outfit(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1E293B),
+              ),
+            ),
+      actions: [
+        if (_selectedIndex == 0)
           IconButton(
             icon: const Icon(HugeIcons.strokeRoundedNotification01, color: Color(0xFF1E293B)),
             onPressed: () {},
           ),
-          const SizedBox(width: 16),
-        ],
-      ),
-      body: Container(
+        const SizedBox(width: 16),
+      ],
+    ),
+        body: Container(
         color: const Color(0xFFF8F9FC),
         child: PageTransitionSwitcher(
           duration: const Duration(milliseconds: 300),
