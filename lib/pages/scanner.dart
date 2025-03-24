@@ -62,15 +62,21 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
     super.initState();
     _checkPermission();
     
+    // Replace the existing _animationController and _animation initialization in initState()
     _animationController = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     )..repeat(reverse: true);
-    
+
     _animation = Tween<double>(
-      begin: 0.0,
-      end: 200.0,
-    ).animate(_animationController);
+      begin: 10.0,
+      end: 210.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
@@ -109,6 +115,69 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                 const Icon(
                   HugeIcons.strokeRoundedAlertCircle,
                   color: Color(0xFFE21C3D),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: GoogleFonts.outfit(
+                      color: const Color(0xFF141414),
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    HugeIcons.strokeRoundedMultiplicationSign,
+                    color: Colors.grey,
+                    size: 20,
+                  ),
+                  onPressed: () => overlayEntry.remove(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (overlayEntry.mounted) {
+        overlayEntry.remove();
+      }
+    });
+  }
+
+  void _showSnackBarsuccess(BuildContext context, String message) {
+    final overlay = Overlay.of(context);
+    late OverlayEntry overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).padding.top + 10,
+        left: 16,
+        right: 16,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            height: 40,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE4F5E2),
+              borderRadius: SmoothBorderRadius(
+                cornerRadius: 8,
+                cornerSmoothing: 1,
+              ),
+              border: Border.all(color: const Color(0xFF18920D)),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  HugeIcons.strokeRoundedAlertCircle,
+                  color: Color(0xFF18920D),
                   size: 20,
                 ),
                 const SizedBox(width: 8),
@@ -197,7 +266,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 246, 246, 248),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
@@ -256,13 +325,46 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                             ? 'Pilih tipe pencarian dulu' 
                             : 'Cari Kode ${_selectedPrefix}',
                           filled: true,
-                          fillColor: Colors.white, 
+                          fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: SmoothBorderRadius(
                               cornerRadius: 12,
                               cornerSmoothing: 1,
                             ),
-                            borderSide: BorderSide.none,
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade100, // Default border (rarely used)
+                              width: 2.0,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: SmoothBorderRadius(
+                              cornerRadius: 12,
+                              cornerSmoothing: 1,
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade100, // Grey border when enabled
+                              width: 2.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: SmoothBorderRadius(
+                              cornerRadius: 12,
+                              cornerSmoothing: 1,
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade100, // Darker grey when focused
+                              width: 2.0,
+                            ),
+                          ),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: SmoothBorderRadius(
+                              cornerRadius: 12,
+                              cornerSmoothing: 1,
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade100, // Darker grey when focused
+                              width: 2.0,
+                            ),
                           ),
                           prefixIcon: IconButton(
                             icon: Icon(HugeIcons.strokeRoundedSearch01),
@@ -280,7 +382,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                         onSubmitted: (value) {
                           _searchWithPrefix();
                         },
-                      ),
+                      )
                     ),
                     const SizedBox(width: 12),
                     Container(
@@ -292,6 +394,10 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                           cornerRadius: 12,
                           cornerSmoothing: 1,
                         ),
+                        border: Border.all(
+                              color: Colors.grey.shade100,
+                              width: 2,
+                            ),
                       ),
                       child: IconButton(
                         icon: Icon(HugeIcons.strokeRoundedFilterHorizontal),
@@ -316,7 +422,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.info_outline, color: Colors.amber),
+                          const Icon(HugeIcons.strokeRoundedAlertCircle, color: Colors.amber),
                           const SizedBox(width: 8),
                           const Text('Pilih SO, PO, atau PD terlebih dahulu'),
                         ],
@@ -354,38 +460,67 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                                 decoration: InputDecoration(
                                   hintText: 'Kode Roll',
                                   filled: true,
-                                  fillColor: Colors.white, 
+                                  fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16), // Added padding
                                   border: OutlineInputBorder(
                                     borderRadius: SmoothBorderRadius(
                                       cornerRadius: 12,
                                       cornerSmoothing: 1,
                                     ),
-                                    borderSide: BorderSide.none,
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade100,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: SmoothBorderRadius(
+                                      cornerRadius: 12,
+                                      cornerSmoothing: 1,
+                                    ),
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade100,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: SmoothBorderRadius(
+                                      cornerRadius: 12,
+                                      cornerSmoothing: 1,
+                                    ),
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade100,
+                                      width: 2.0,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 8),
-                            ElevatedButton(
-                              onPressed: () {
-                                if (_debugProductController.text.isNotEmpty) {
-                                  _addScannedProduct(_debugProductController.text);
-                                  _debugProductController.clear();
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.amber,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: SmoothBorderRadius(
-                                    cornerRadius: 12,
-                                    cornerSmoothing: 1,
+                            SizedBox(
+                              height: 48, // Matches TextField's standard height
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (_debugProductController.text.isNotEmpty) {
+                                    _addScannedProduct(_debugProductController.text);
+                                    _debugProductController.clear();
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFF3461FD),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: SmoothBorderRadius(
+                                      cornerRadius: 12,
+                                      cornerSmoothing: 1,
+                                    ),
                                   ),
+                                  padding: EdgeInsets.symmetric(horizontal: 24), // Ensures proper button content spacing
                                 ),
+                                child: const Text('Add', style: TextStyle(color: Colors.white)),
                               ),
-                              child: const Text('Add'),
                             ),
                           ],
                         ),
+
                       ],
                     ),
                   ),
@@ -407,7 +542,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline, color: Color(0xFF3461FD)),
+                    const Icon(HugeIcons.strokeRoundedAlertCircle, color: Color(0xFF3461FD)),
                     const SizedBox(width: 8),
                     Text(
                       'Scan untuk $_selectedPrefix: $_currentSalesOrder',
@@ -449,42 +584,104 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                         }
                       },
                     ),
+                    // Replace the existing AnimatedBuilder section in the MobileScanner stack with this code
                     Center(
-                      child: Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          borderRadius: SmoothBorderRadius(
-                            cornerRadius: 12,
-                            cornerSmoothing: 1,
-                          ),
-                        ),
-                      ),
-                    ),
-                    AnimatedBuilder(
-                      animation: _animation,
-                      builder: (context, child) {
-                        return Positioned(
-                          top: _animation.value,
-                          left: 100,
-                          right: 100, 
-                          child: Container(
-                            width: 200,
-                            height: 2,
+                      child: AnimatedBuilder(
+                        animation: _animationController,
+                        builder: (context, child) {
+                          return Container(
+                            width: 220,
+                            height: 220,
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.white.withOpacity(0.5),
-                                  blurRadius: 5,
-                                  spreadRadius: 2,
+                              border: Border.all(
+                                color: Colors.transparent,
+                                width: 2,
+                              ),
+                              borderRadius: SmoothBorderRadius(
+                                cornerRadius: 12,
+                                cornerSmoothing: 1,
+                              ),
+                            ),
+                            child: Stack(
+                              children: [
+                                // Animated scanning line
+                                Positioned(
+                                  top: _animation.value,
+                                  left: 0,
+                                  right: 0,
+                                  child: Container(
+                                    height: 3,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.transparent,
+                                          Color(0xFF3461FD).withOpacity(0.8),
+                                          Colors.transparent,
+                                        ],
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Color(0xFF3461FD).withOpacity(0.5),
+                                          blurRadius: 8,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                // Corner decorations
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: _buildCorner(isTop: true, isLeft: true),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: _buildCorner(isTop: true, isLeft: false),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  child: _buildCorner(isTop: false, isLeft: true),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: _buildCorner(isTop: false, isLeft: false),
                                 ),
                               ],
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
+                    // AnimatedBuilder(
+                    //   animation: _animation,
+                    //   builder: (context, child) {
+                    //     return Positioned(
+                    //       top: _animation.value,
+                    //       left: 100,
+                    //       right: 100, 
+                    //       child: Container(
+                    //         width: 200,
+                    //         height: 2,
+                    //         decoration: BoxDecoration(
+                    //           color: Colors.white,
+                    //           boxShadow: [
+                    //             BoxShadow(
+                    //               color: Colors.white.withOpacity(0.5),
+                    //               blurRadius: 5,
+                    //               spreadRadius: 2,
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),
@@ -515,54 +712,66 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16), 
-                        child: ClipRRect(
-                          borderRadius: SmoothBorderRadius(
-                          cornerRadius: 12,
-                          cornerSmoothing: 1,
-                        ),
-                          child: Dismissible(
-                            key: Key(code),
-                            direction: DismissDirection.endToStart,
-                            onDismissed: (direction) {
-                              setState(() {
-                                _scannedProducts.remove(code);
-                              });
-                              _showSnackBar(context, '$code dihapus');
-                            },
-                            background: Container(
-                              alignment: Alignment.centerRight,
-                              padding: const EdgeInsets.only(right: 20),
-                              decoration: BoxDecoration(
-                                color: Color(0xFF3461FD).withOpacity(0.3),
-                              ),
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade100,
+                              width: 2,
+                            ),
+                            borderRadius: SmoothBorderRadius(
+                              cornerRadius: 12,
+                              cornerSmoothing: 1,
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: SmoothBorderRadius(
+                              cornerRadius: 12,
+                              cornerSmoothing: 1,
+                            ),
+                            child: Dismissible(
+                              key: Key(code),
+                              direction: DismissDirection.endToStart,
+                              onDismissed: (direction) {
+                                setState(() {
+                                  _scannedProducts.remove(code);
+                                });
+                                _showSnackBar(context, '$code dihapus');
+                              },
+                              background: Container(
+                                alignment: Alignment.centerRight,
+                                padding: const EdgeInsets.only(right: 20),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF3461FD).withOpacity(0.3),
                                 ),
-                                child: const Center(
-                                  child: Icon(
-                                    HugeIcons.strokeRoundedDelete02,
-                                    color: Colors.red,
-                                    size: 24,
+                                child: Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Center(
+                                    child: Icon(
+                                      HugeIcons.strokeRoundedDelete02,
+                                      color: Colors.red,
+                                      size: 24,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            child: Container(
-                              width: double.infinity,
-                              height: 60,
-                              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              child: Text(
-                                code,
-                                style: GoogleFonts.outfit(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                              child: Container(
+                                width: double.infinity,
+                                height: 60,
+                                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                child: Text(
+                                  code,
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
@@ -605,7 +814,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
               ),
               onPressed: (_currentSalesOrder != null && _scannedProducts.isNotEmpty) 
                 ? () {
-                    _showSnackBar(context, 'Berhasil!');
+                    _showSnackBarsuccess(context, 'Berhasil!');
                   }
                 : null,
               child: Text(
@@ -686,6 +895,28 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
     );
   }
 
+  Widget _buildCorner({required bool isTop, required bool isLeft}) {
+  return Container(
+    width: 24,
+    height: 24,
+    decoration: BoxDecoration(
+      border: Border(
+        top: isTop ? BorderSide(color: Colors.white, width: 3) : BorderSide.none,
+        bottom: !isTop ? BorderSide(color: Colors.white, width: 3) : BorderSide.none,
+        left: isLeft ? BorderSide(color: Colors.white, width: 3) : BorderSide.none,
+        right: !isLeft ? BorderSide(color: Colors.white, width: 3) : BorderSide.none,
+      ),
+      borderRadius: BorderRadius.only(
+        topLeft: isTop && isLeft ? Radius.circular(12) : Radius.zero,
+        topRight: isTop && !isLeft ? Radius.circular(12) : Radius.zero,
+        bottomLeft: !isTop && isLeft ? Radius.circular(12) : Radius.zero,
+        bottomRight: !isTop && !isLeft ? Radius.circular(12) : Radius.zero,
+      ),
+    ),
+  );
+}
+
+
   Widget _buildFilterOption(String label, StateSetter setModalState) {
     return InkWell(
       onTap: () {
@@ -720,7 +951,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
             ),
             const Spacer(),
             if (_selectedPrefix == label)
-              Icon(Icons.check_circle, color: Color(0xFF3461FD)),
+              Icon(HugeIcons.strokeRoundedCheckmarkCircle01, color: Color(0xFF3461FD)),
           ],
         ),
       ),
@@ -751,7 +982,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
         _currentSalesOrder = code;
         _scannedProducts.clear(); 
       });
-      _showSnackBar(context, '$_selectedPrefix $code dipilih');
+      _showSnackBarsuccess(context, '$_selectedPrefix $code dipilih');
     } else {
       _showSnackBar(context, 'Kode $_selectedPrefix tidak ditemukan');
     }

@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
           ? Row(
               children: [
                 Text(
-                  'Halo, wahooy',
+                  'Halo, Wahooy',
                   style: GoogleFonts.outfit(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -131,17 +131,19 @@ class HomeContent extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
+              decoration: ShapeDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFF3461FD), Color(0xFF7C3AED)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: SmoothBorderRadius(
-                  cornerRadius: 24,
-                  cornerSmoothing: 1,
+                shape: SmoothRectangleBorder(
+                  borderRadius: SmoothBorderRadius(
+                    cornerRadius: 24,
+                    cornerSmoothing: 1,
+                  ),
                 ),
-                boxShadow: [
+                shadows: [
                   BoxShadow(
                     color: const Color(0xFF3461FD).withOpacity(0.3),
                     offset: const Offset(0, 10),
@@ -171,9 +173,14 @@ class HomeContent extends StatelessWidget {
                   const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                    decoration: BoxDecoration(
+                    decoration: ShapeDecoration(
                       color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
+                      shape: SmoothRectangleBorder(
+                        borderRadius: SmoothBorderRadius(
+                          cornerRadius: 14,
+                          cornerSmoothing: 1,
+                        ),
+                      ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -194,6 +201,7 @@ class HomeContent extends StatelessWidget {
                       ],
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -293,32 +301,32 @@ class HomeContent extends StatelessWidget {
       ),
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
+        decoration: ShapeDecoration(
           color: Colors.white,
-          borderRadius: SmoothBorderRadius(
-            cornerRadius: 20,
-            cornerSmoothing: 1,
-          ),
-          border: Border.all(
-            color: Colors.grey.shade100,
-            width: 2,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+          shape: SmoothRectangleBorder(
+            borderRadius: SmoothBorderRadius(
+              cornerRadius: 24,
+              cornerSmoothing: 1,
             ),
-          ],
+            side: BorderSide(
+              color: Colors.grey.shade100,
+              width: 2,
+            ),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
+              decoration: ShapeDecoration(
                 color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
+                shape: SmoothRectangleBorder(
+                  borderRadius: SmoothBorderRadius(
+                    cornerRadius: 12,
+                    cornerSmoothing: 1,
+                  ),
+                ),
               ),
               child: Icon(
                 iconData,
@@ -367,23 +375,18 @@ class HomeContent extends StatelessWidget {
         ),
         child: Container(
           padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
             color: Colors.white,
-            borderRadius: SmoothBorderRadius(
-              cornerRadius: 16,
-              cornerSmoothing: 1,
-            ),
-            border: Border.all(
-              color: Colors.grey.shade100,
-              width: 2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+            shape: SmoothRectangleBorder(
+              borderRadius: SmoothBorderRadius(
+                cornerRadius: 24,
+                cornerSmoothing: 1,
               ),
-            ],
+              side: BorderSide(
+                color: Colors.grey.shade100,
+                width: 2,
+              ),
+            ),
           ),
           child: Column(
             children: [
@@ -394,9 +397,14 @@ class HomeContent extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
+                        decoration: ShapeDecoration(
                           color: const Color(0xFF3461FD).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          shape: SmoothRectangleBorder(
+                            borderRadius: SmoothBorderRadius(
+                              cornerRadius: 12,
+                              cornerSmoothing: 1,
+                            ),
+                          ),
                         ),
                         child: const Icon(
                           HugeIcons.strokeRoundedFileVerified,
@@ -417,9 +425,14 @@ class HomeContent extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
+                    decoration: ShapeDecoration(
                       color: statusColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
+                      shape: SmoothRectangleBorder(
+                        borderRadius: SmoothBorderRadius(
+                          cornerRadius: 8,
+                          cornerSmoothing: 1,
+                        ),
+                      ),
                     ),
                     child: Text(
                       status,
